@@ -64,23 +64,22 @@ public class SimpleSchoolBookRepository implements BookRepository<SchoolBook> {
 
         boolean result = false;
         SchoolBook[] tempSchoolBook = schoolBooks;
-        int i=0;
 
-        for (SchoolBook schoolBook : schoolBooks) {
-            if (schoolBook.getName().equals(name)) {
-                i = tempSchoolBook.length;
-                tempSchoolBook = ArrayUtils.remove(schoolBooks, ArrayUtils.indexOf(schoolBooks, schoolBook));
-                result = true;
-            }
-        }
+        schoolBooks=ArrayUtils.removeElements(schoolBooks, findByName(name));
 
-        if (result) {
-            if(i==1){
-                schoolBooks = new SchoolBook[0];
-            } else {
-                schoolBooks = tempSchoolBook;
-            }
-        }
+//        for (SchoolBook schoolBook : schoolBooks) {
+//            if (schoolBook.getName().equals(name)) {
+//
+//                if (tempSchoolBook.length == 1) {
+//                    tempSchoolBook = new SchoolBook[0];
+//                } else {
+//                    tempSchoolBook = ArrayUtils.removeElement(schoolBooks, schoolBook);
+//                }
+//                result = true;
+//            }
+//        }
+
+     //   schoolBooks = tempSchoolBook;
 
         return result;
     }

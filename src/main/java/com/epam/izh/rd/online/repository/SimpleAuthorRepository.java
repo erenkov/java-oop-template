@@ -14,28 +14,10 @@ public class SimpleAuthorRepository implements AuthorRepository {
         this.authors = authors;
     }
 
-    /**
-     * Метод должен сохранять автора в массив authors.
-     * Массив при каждом сохранении должен увеличиваться в размере ровно на 1.
-     * То есть он ровно того размера, сколько сущностей мы в него сохранили.
-     * <p>
-     * Если на вход для сохранения приходит автор, который уже есть в массиве (сохранен), то автор не сохраняется и
-     * метод возвращает false.
-     * <p>
-     * Можно сравнивать только по полному имени (имя и фамилия), считаем, что двух авторов
-     * с одинаковыми именем и фамилией быть не может.
-     * Подсказка - можно использовать для проверки метод findByFullName.
-     * <p>
-     * Если сохранение прошло успешно, метод должен вернуть true.
-     */
     @Override
     public boolean save(Author author) {
 
         if (findByFullName(author.getName(), author.getLastName()) == null) {
-//              Author[] array = Arrays.copyOf(authors, authors.length + 1);
-//              array[array.length - 1] = author;
-//              authors = array;
-
             authors = ArrayUtils.add(authors, new Author(author));
             return true;
         }
@@ -43,12 +25,6 @@ public class SimpleAuthorRepository implements AuthorRepository {
         return false;
     }
 
-    /**
-     * Метод должен находить в массиве authors автора по имени и фамилии (считаем, что двух авторов
-     * с одинаковыми именем и фамилией быть не может.)
-     * <p>
-     * Если автор с таким именем и фамилией найден - возвращаем его, если же не найден, метод должен вернуть null.
-     */
     @Override
     public Author findByFullName(String name, String lastname) {
 
@@ -76,8 +52,7 @@ public class SimpleAuthorRepository implements AuthorRepository {
     public boolean remove(Author author) {
 
         if (findByFullName(author.getName(), author.getLastName()) != null) {
-
-            authors = ArrayUtils.remove(authors, ArrayUtils.indexOf(authors, author));
+            authors = ArrayUtils.removeElement(authors, author);
             return true;
         }
 

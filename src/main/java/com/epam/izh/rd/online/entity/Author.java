@@ -18,7 +18,7 @@ import java.util.Objects;
  * 5) Переопределить методы equals и hashCode - используйте генерацию (не забывайте alt+inset)
  * 6) Переопределить метод toString с выводом всех полей (не забывайте alt+inset)
  */
-public class Author{
+public class Author {
     private String name;
     private String lastName;
     private LocalDate birthdate;
