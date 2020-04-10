@@ -18,83 +18,41 @@ public class SimpleSchoolBookService implements BookService {
         this.authorService = authorService;
     }
 
-    /**
-     * Метод должен сохранять книгу.
-     * <p>
-     * Перед сохранением книги нужно проверить, сохранен ли такой автор в базе авторов.
-     * То есть вы должен взять имя и фамилию автора из книги и обратиться к сервису авторов и узнать о наличии такого автора.
-     * Напомню, что мы считаем, что двух авторов с одинаковыми именем и фамилией быть не может.
-     * <p>
-     * Если такой автор сущесвует (сохранен) - значит можно сохранять и книгу.
-     * Если же такого автора в базе нет, значит книгу сохранять нельзя.
-     * <p>
-     * Соответственно, если книга была успешно сохранена - метод возвращает true, если же книга не была сохранена - метод возвращает false.
-     */
     @Override
     public boolean save(Book book) {
-
-        if (authorService.findByFullName(((SchoolBook) book).getAuthorName(), ((SchoolBook) book).getAuthorLastName()) != null) {
+        if (authorService.findByFullName( ((SchoolBook) book).getAuthorName(),
+                                          ((SchoolBook) book).getAuthorLastName()) != null ) {
             schoolBookBookRepository.save((SchoolBook) book);
             return true;
         }
-
         return false;
     }
 
-    /**
-     * Метод должен находить книгу по имени.
-     * <p>
-     * По факту, он просто обращается к репозиторию с книгами и вызывает аналогичный метод, псоле чего возвращает результат.
-     */
     @Override
     public Book[] findByName(String name) {
         return schoolBookBookRepository.findByName(name);
     }
 
-    /**
-     * Метод должен находить количество сохраненных книг по конкретному имени книги.
-     */
     @Override
     public int getNumberOfBooksByName(String name) {
         SchoolBook[] schoolBook = schoolBookBookRepository.findByName(name);
         return schoolBook.length;
     }
 
-    /**
-     * Метод должен удалять все книги по имени.
-     * <p>
-     * По факту, он просто обращается к репозиторию с книгами и вызывает аналогичный метод, псоле чего возвращает результат.
-     */
     @Override
     public boolean removeByName(String name) {
-        schoolBookBookRepository.removeByName(name);
-        return true;
+        return schoolBookBookRepository.removeByName(name);
     }
 
-    /**
-     * Метод должен возвращать количество всех книг.
-     * <p>
-     * По факту, он просто обращается к репозиторию с книгами и вызывает аналогичный метод, псоле чего возвращает результат.
-     */
     @Override
     public int count() {
         return schoolBookBookRepository.count();
     }
 
-    /**
-     * Метод должен возвращать автора книги по названию книги.
-     * <p>
-     * То есть приждется сходить и в репозиторий с книгами и в сервис авторов.
-     * <p>
-     * Если такой книги не найдено, метод должен вернуть null.
-     */
     @Override
     public Author findAuthorByBookName(String name) {
-        SchoolBook[] schoolBook = schoolBookBookRepository.findByName(name);
-        Author author = authorService.findByFullName(schoolBook[0].getAuthorName(), schoolBook[0].getAuthorLastName());
-        if (author != null) {
-            return author;
-        }
-        return null;
+        Author author = authorService.findByFullName(schoolBookBookRepository.findByName(name)[0].getAuthorName(),
+                                                     schoolBookBookRepository.findByName(name)[0].getAuthorLastName());
+        return author;
     }
 }
