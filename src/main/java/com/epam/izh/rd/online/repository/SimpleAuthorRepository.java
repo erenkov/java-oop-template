@@ -1,9 +1,18 @@
 package com.epam.izh.rd.online.repository;
 
 import com.epam.izh.rd.online.entity.Author;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class SimpleAuthorRepository implements AuthorRepository {
-    Author[] authors = new Author[0];
+
+    private Author[] authors = new Author[0];
+
+    public SimpleAuthorRepository() {
+    }
+
+    public SimpleAuthorRepository(Author[] authors) {
+        this.authors = authors;
+    }
 
     /**
      * Метод должен сохранять автора в массив authors.
@@ -22,6 +31,15 @@ public class SimpleAuthorRepository implements AuthorRepository {
     @Override
     public boolean save(Author author) {
 
+        if (findByFullName(author.getName(), author.getLastName()) == null) {
+//              Author[] array = Arrays.copyOf(authors, authors.length + 1);
+//              array[array.length - 1] = author;
+//              authors = array;
+
+            authors = ArrayUtils.add(authors, new Author(author));
+            return true;
+        }
+
         return false;
     }
 
@@ -33,6 +51,13 @@ public class SimpleAuthorRepository implements AuthorRepository {
      */
     @Override
     public Author findByFullName(String name, String lastname) {
+
+        for (Author author : authors) {
+            if (author.getName().equals(name) && author.getLastName().equals(lastname)) {
+                return author;
+            }
+        }
+
         return null;
     }
 
@@ -49,6 +74,13 @@ public class SimpleAuthorRepository implements AuthorRepository {
      */
     @Override
     public boolean remove(Author author) {
+
+        if (findByFullName(author.getName(), author.getLastName()) != null) {
+
+            authors = ArrayUtils.remove(authors, ArrayUtils.indexOf(authors, author));
+            return true;
+        }
+
         return false;
     }
 
@@ -57,6 +89,6 @@ public class SimpleAuthorRepository implements AuthorRepository {
      */
     @Override
     public int count() {
-        return 0;
+        return authors.length;
     }
 }

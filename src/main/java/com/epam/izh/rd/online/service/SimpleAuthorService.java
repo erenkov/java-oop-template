@@ -2,9 +2,11 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.entity.Author;
 import com.epam.izh.rd.online.repository.AuthorRepository;
+import com.epam.izh.rd.online.repository.SimpleAuthorRepository;
 
 public class SimpleAuthorService implements AuthorService {
-    private AuthorRepository authorRepository;
+
+    private AuthorRepository authorRepository = new SimpleAuthorRepository();
 
     public SimpleAuthorService() {
     }
@@ -19,7 +21,7 @@ public class SimpleAuthorService implements AuthorService {
      */
     @Override
     public boolean save(Author author) {
-        return false;
+        return authorRepository.save(author);
     }
 
     /**
@@ -28,7 +30,7 @@ public class SimpleAuthorService implements AuthorService {
      */
     @Override
     public Author findByFullName(String name, String lastname) {
-        return null;
+        return authorRepository.findByFullName(name, lastname);
     }
 
     /**
@@ -37,7 +39,7 @@ public class SimpleAuthorService implements AuthorService {
      */
     @Override
     public boolean remove(Author author) {
-        return false;
+        return authorRepository.remove(author);
     }
 
     /**
@@ -46,6 +48,6 @@ public class SimpleAuthorService implements AuthorService {
      */
     @Override
     public int count() {
-        return 0;
+        return authorRepository.count();
     }
 }

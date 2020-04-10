@@ -18,7 +18,7 @@ import java.util.Objects;
  * 5) Переопределить методы equals и hashCode - используйте генерацию (не забывайте alt+inset)
  * 6) Переопределить метод toString с выводом всех полей (не забывайте alt+inset)
  */
-public class Author {
+public class Author{
     private String name;
     private String lastName;
     private LocalDate birthdate;
@@ -32,6 +32,10 @@ public class Author {
         this.lastName = lastName;
         this.birthdate = birthdate;
         this.country = country;
+    }
+
+    public Author(Author author) {
+        this(author.getName(), author.getLastName(), author.getBirthdate(), author.getCountry());
     }
 
     public String getName() {

@@ -1,8 +1,18 @@
 package com.epam.izh.rd.online.repository;
 
 import com.epam.izh.rd.online.entity.SchoolBook;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class SimpleSchoolBookRepository implements BookRepository<SchoolBook> {
+    private SchoolBook[] schoolBooks = new SchoolBook[0];
+
+    public SimpleSchoolBookRepository() {
+    }
+
+    public SimpleSchoolBookRepository(SchoolBook[] schoolBooks) {
+        this.schoolBooks = schoolBooks;
+    }
+
     /**
      * Метод должен сохранять школьную книгу в массив schoolBooks.
      * Массив при каждом сохранении должен увеличиваться в размере ровно на 1.
@@ -14,7 +24,9 @@ public class SimpleSchoolBookRepository implements BookRepository<SchoolBook> {
      */
     @Override
     public boolean save(SchoolBook book) {
-        return false;
+
+        schoolBooks = ArrayUtils.add(schoolBooks, new SchoolBook(book));
+        return true;
     }
 
     /**
@@ -25,7 +37,15 @@ public class SimpleSchoolBookRepository implements BookRepository<SchoolBook> {
      */
     @Override
     public SchoolBook[] findByName(String name) {
-        return new SchoolBook[0];
+
+        SchoolBook[] result = new SchoolBook[0];
+
+        for (SchoolBook iterSchoolBook : schoolBooks) {
+            if (iterSchoolBook.getName().equals(name)) {
+                result = ArrayUtils.add(result, new SchoolBook(iterSchoolBook));
+            }
+        }
+        return result;
     }
 
     /**
@@ -41,7 +61,28 @@ public class SimpleSchoolBookRepository implements BookRepository<SchoolBook> {
      */
     @Override
     public boolean removeByName(String name) {
-        return false;
+
+        boolean result = false;
+        SchoolBook[] tempSchoolBook = schoolBooks;
+        int i=0;
+
+        for (SchoolBook schoolBook : schoolBooks) {
+            if (schoolBook.getName().equals(name)) {
+                i = tempSchoolBook.length;
+                tempSchoolBook = ArrayUtils.remove(schoolBooks, ArrayUtils.indexOf(schoolBooks, schoolBook));
+                result = true;
+            }
+        }
+
+        if (result) {
+            if(i==1){
+                schoolBooks = new SchoolBook[0];
+            } else {
+                schoolBooks = tempSchoolBook;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -49,6 +90,6 @@ public class SimpleSchoolBookRepository implements BookRepository<SchoolBook> {
      */
     @Override
     public int count() {
-        return 0;
+        return schoolBooks.length;
     }
 }

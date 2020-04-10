@@ -4,10 +4,11 @@ import com.epam.izh.rd.online.entity.Author;
 import com.epam.izh.rd.online.entity.Book;
 import com.epam.izh.rd.online.entity.SchoolBook;
 import com.epam.izh.rd.online.repository.BookRepository;
+import com.epam.izh.rd.online.repository.SimpleSchoolBookRepository;
 
 public class SimpleSchoolBookService implements BookService {
-    private BookRepository<SchoolBook> schoolBookBookRepository;
-    private AuthorService authorService;
+    private BookRepository<SchoolBook> schoolBookBookRepository = new SimpleSchoolBookRepository();
+    private AuthorService authorService = new SimpleAuthorService();
 
     public SimpleSchoolBookService() {
     }
@@ -31,6 +32,12 @@ public class SimpleSchoolBookService implements BookService {
      */
     @Override
     public boolean save(Book book) {
+
+        if (authorService.findByFullName(((SchoolBook) book).getAuthorName(), ((SchoolBook) book).getAuthorLastName()) != null) {
+            schoolBookBookRepository.save((SchoolBook) book);
+            return true;
+        }
+
         return false;
     }
 
@@ -41,7 +48,7 @@ public class SimpleSchoolBookService implements BookService {
      */
     @Override
     public Book[] findByName(String name) {
-        return new Book[0];
+        return schoolBookBookRepository.findByName(name);
     }
 
     /**
@@ -49,7 +56,8 @@ public class SimpleSchoolBookService implements BookService {
      */
     @Override
     public int getNumberOfBooksByName(String name) {
-        return 0;
+        SchoolBook[] schoolBook = schoolBookBookRepository.findByName(name);
+        return schoolBook.length;
     }
 
     /**
@@ -59,7 +67,8 @@ public class SimpleSchoolBookService implements BookService {
      */
     @Override
     public boolean removeByName(String name) {
-        return false;
+        schoolBookBookRepository.removeByName(name);
+        return true;
     }
 
     /**
@@ -69,7 +78,7 @@ public class SimpleSchoolBookService implements BookService {
      */
     @Override
     public int count() {
-        return 0;
+        return schoolBookBookRepository.count();
     }
 
     /**
@@ -81,6 +90,11 @@ public class SimpleSchoolBookService implements BookService {
      */
     @Override
     public Author findAuthorByBookName(String name) {
+        SchoolBook[] schoolBook = schoolBookBookRepository.findByName(name);
+        Author author = authorService.findByFullName(schoolBook[0].getAuthorName(), schoolBook[0].getAuthorLastName());
+        if (author != null) {
+            return author;
+        }
         return null;
     }
 }
