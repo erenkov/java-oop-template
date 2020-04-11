@@ -34,6 +34,7 @@ public class Author {
         this.country = country;
     }
 
+    /* Конструктор будет использован для копирования (т.к. Author содержит только не изменяемые поля) */
     public Author(Author author) {
         this(author.getName(), author.getLastName(), author.getBirthdate(), author.getCountry());
     }

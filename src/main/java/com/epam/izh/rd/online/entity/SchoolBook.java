@@ -34,6 +34,7 @@ public class SchoolBook extends Book {
         this.publishDate = publishDate;
     }
 
+    /* Конструктор будет использован для копирования (т.к. SchoolBook содержит только не изменяемые поля) */
     public SchoolBook(SchoolBook book) {
         this(book.getNumberOfPages(), book.getName(), book.getAuthorName(), book.getAuthorLastName(), book.getPublishDate());
     }

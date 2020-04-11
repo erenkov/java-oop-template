@@ -20,7 +20,7 @@ public class SimpleSchoolBookService implements BookService {
 
     @Override
     public boolean save(Book book) {
-        if (authorService.findByFullName( ((SchoolBook) book).getAuthorName(),
+        if (authorService.findByFullName( ((SchoolBook) book).getAuthorName(),  //Нисходящее приведение - явно приводим тип
                                           ((SchoolBook) book).getAuthorLastName()) != null ) {
             schoolBookBookRepository.save((SchoolBook) book);
             return true;
@@ -35,8 +35,8 @@ public class SimpleSchoolBookService implements BookService {
 
     @Override
     public int getNumberOfBooksByName(String name) {
-        SchoolBook[] schoolBook = schoolBookBookRepository.findByName(name);
-        return schoolBook.length;
+        SchoolBook[] schoolBook = schoolBookBookRepository.findByName(name);    //Получаем массив отсортированный по имени
+        return schoolBook.length;                                               //Возвращаем его длину
     }
 
     @Override
@@ -51,6 +51,9 @@ public class SimpleSchoolBookService implements BookService {
 
     @Override
     public Author findAuthorByBookName(String name) {
+        /* Получаем полное имя автора по названию книги (я предположил что книгу с одинаковым названием не могут написать */
+        /* разные авторы (т.к. вернуть из метода нужно 1 автора)), иначе нужно было перебрать все элементы возвращаемые*/
+        /* методом .findByName(name).      Затем производим поиск автора по полному имени */
         Author author = authorService.findByFullName(schoolBookBookRepository.findByName(name)[0].getAuthorName(),
                                                      schoolBookBookRepository.findByName(name)[0].getAuthorLastName());
         return author;

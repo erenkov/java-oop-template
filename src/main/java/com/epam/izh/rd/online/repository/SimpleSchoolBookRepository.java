@@ -15,28 +15,30 @@ public class SimpleSchoolBookRepository implements BookRepository<SchoolBook> {
 
     @Override
     public boolean save(SchoolBook book) {
-        int lenghtSchoolBooksBeforeRemove = schoolBooks.length;
+        int lenghtSchoolBooksBeforeRemove = schoolBooks.length;         //Запоминаем длину массива до удаления
+        /* В нов. массив большей длинны добавляем копию book (т.к. SchoolBook содержит только не изменяемые поля)*/
         schoolBooks = ArrayUtils.add(schoolBooks, new SchoolBook(book));
-        return lenghtSchoolBooksBeforeRemove != schoolBooks.length;
+        return lenghtSchoolBooksBeforeRemove != schoolBooks.length;     //Если длина массива изменилась то true
     }
 
     @Override
     public SchoolBook[] findByName(String name) {
-        SchoolBook[] foundBooks = new SchoolBook[0];
+        SchoolBook[] foundBooks = new SchoolBook[0];        //Для массива найденных элементов
 
-        for (SchoolBook schoolBook : schoolBooks) {
-            if (schoolBook.getName().equals(name)) {
-                foundBooks = ArrayUtils.add(foundBooks, new SchoolBook(schoolBook));
+        for (SchoolBook schoolBook : schoolBooks) {                                     //Перебираем массив
+            if (schoolBook.getName().equals(name)) {                                    //Если название совпадает, то
+                foundBooks = ArrayUtils.add(foundBooks, new SchoolBook(schoolBook));    //Записываем в массив найденных
             }
         }
-        return foundBooks;
+        return foundBooks;                                  //Возвращаем массив найденных
     }
 
     @Override
     public boolean removeByName(String name) {
-        int lenghtSchoolBooksBeforeRemove = schoolBooks.length;
+        int lenghtSchoolBooksBeforeRemove = schoolBooks.length;         //Запоминаем длину массива до удаления
+        /* Удаляем из массива schoolBooks элементы найденные по названию */
         schoolBooks = ArrayUtils.removeElements(schoolBooks, findByName(name));
-        return lenghtSchoolBooksBeforeRemove != schoolBooks.length;
+        return lenghtSchoolBooksBeforeRemove != schoolBooks.length;     //Если длина массива изменилась то true
     }
 
     @Override

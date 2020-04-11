@@ -16,18 +16,19 @@ public class SimpleAuthorRepository implements AuthorRepository {
 
     @Override
     public boolean save(Author author) {
-        if (findByFullName(author.getName(), author.getLastName()) == null) {
+        int lenghtSchoolBooksBeforeRemove = authors.length;                    //Запоминаем длину массива до сохранения
+        if (findByFullName(author.getName(), author.getLastName()) == null) {  //Поиск по имени - если не найден автор, то
+            /* В нов. массив большей длинны добавляем копию author (т.к. Author содержит только не изменяемые поля)*/
             authors = ArrayUtils.add(authors, new Author(author));
-            return true;
         }
-        return false;
+        return lenghtSchoolBooksBeforeRemove != authors.length;                 //Если длина массива изменилась то true
     }
 
     @Override
     public Author findByFullName(String name, String lastname) {
-        for (Author author : authors) {
-            if (author.getName().equals(name) && author.getLastName().equals(lastname)) {
-                return author;
+        for (Author author : authors) {                                                     //Перебираем массив
+            if (author.getName().equals(name) && author.getLastName().equals(lastname)) {   //Проверяем соответствие полного имени
+                return author;                                                              //Возвращаем подходящий результат
             }
         }
         return null;
@@ -35,11 +36,10 @@ public class SimpleAuthorRepository implements AuthorRepository {
 
     @Override
     public boolean remove(Author author) {
-        if (findByFullName(author.getName(), author.getLastName()) != null) {
-            authors = ArrayUtils.removeElement(authors, author);
-            return true;
-        }
-        return false;
+        int lenghtSchoolBooksBeforeRemove = authors.length;         //Запоминаем длину массива до удаления
+        /* Удаляем из массива authors элемент найденный по полному имени */
+        authors = ArrayUtils.removeElement(authors, findByFullName(author.getName(), author.getLastName()));
+        return lenghtSchoolBooksBeforeRemove != authors.length;     //Если длина массива изменилась то true
     }
 
     @Override
